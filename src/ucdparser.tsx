@@ -32,6 +32,22 @@ export const getInfo = async (codepoint: number) => {
   Array.from(char.attributes).forEach((attribute) => {
     obj[attribute.name] = attribute.value
   })
+  let aliases = Array.from(char.getElementsByTagName('name-alias')).map((node) => {
+    let alias = node.getAttribute('alias')
+    let type = node.getAttribute('type')
+    return `${alias}(${type})`
+  }).join(", ")
+  if (aliases !== '') {
+    obj['aliases'] = aliases
+  }
+  let block = Array.from(dict.getElementsByTagName('block')).find((node) => {
+    const first = parseInt(node.getAttribute('first-cp'), 16);
+    const last = parseInt(node.getAttribute('last-cp'), 16);
+    return first <= codepoint && codepoint <= last
+  })
+  if (block) {
+    obj['blockname'] = block.getAttribute('name')
+  }
   if (char.parentNode.nodeName === 'group') {
     Array.from((char.parentNode as Element).attributes).forEach((attribute) => {
       obj[attribute.name] = obj[attribute.name] || attribute.value

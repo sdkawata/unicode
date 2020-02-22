@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useCallback} from 'react'
 import ReactDOM from 'react-dom'
 import {TextField, Grid, Paper, List, ListItem, ListItemText} from '@material-ui/core'
 import {codepointStr} from './util'
@@ -19,6 +19,9 @@ const Index: React.FC = () => {
   const [text, setText] = useState("")
   const [codePointsText, setCodePointsText] = useState('')
   const [codePoint, setCodePoint] = useState(null)
+  const move = useCallback((cp)=> {
+    setCodePoint(cp)
+  },[])
   const textChanged = (e) => {
     const newText = e.target.value
     setText(newText)
@@ -27,9 +30,10 @@ const Index: React.FC = () => {
   }
   const codePointsTextChanged = (e) => {
     setCodePointsText(e.target.value)
-    const newText = e.target.value.split(" ").map((s) =>
-      String.fromCodePoint(parseInt(s, 16))
-    ).join('')
+    const newText = e.target.value.split(" ").map((s) =>{
+      const point = parseInt(s, 16)
+      return isNaN(point) ? '' : String.fromCodePoint(point)
+    }).join('')
     setText(newText)
   }
   const codePoints = [...text]
@@ -56,7 +60,7 @@ const Index: React.FC = () => {
         </Grid>
         <Grid item xs={6}>
           <Paper>
-            <UnicodeView codePoint={codePoint}/>
+            <UnicodeView codePoint={codePoint} move={move}/>
           </Paper>
         </Grid>
       </Grid>
