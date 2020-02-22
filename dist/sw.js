@@ -1,9 +1,9 @@
-const CACHE_NAME='hoge'
+const CACHE_NAME='unicode'
 
 self.addEventListener('install', (e) => {
     e.waitUntil(
       caches.open(CACHE_NAME)
-      .then((cache) => cache.addAll(['/ucd.all.grouped.xml']))
+      .then((cache) => cache.addAll(['/ucd.json']))
     )
 })
 

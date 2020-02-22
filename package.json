@@ -4,8 +4,7 @@
   "description": "",
   "main": "webpack.config.js",
   "scripts": {
-    "watch": "webpack --watch",
-    "getucd": "cd dist && curl http://www.unicode.org/Public/UCD/latest/ucdxml/ucd.all.grouped.zip > ucd.all.grouped.zip && unzip ucd.all.grouped.zip && rm ucd.all.grouped.zip"
+    "watch": "webpack --watch"
   },
   "author": "",
   "license": "ISC",

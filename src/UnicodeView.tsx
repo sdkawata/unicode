@@ -81,7 +81,7 @@ export const UnicodeView: React.FC<props> = ({codePoint, move}) => {
     values.push(['Name(version1)', <span>{detail['na1']}</span>])
   }
   if (detail['aliases']) {
-    values.push(['Alias', <span>{detail['aliases']}</span>])
+    values.push(['Alias', <span>{detail['aliases'].map((alias)=> `${alias['alias']}(${alias['type']})`)}</span>])
   }
   values.push(['Block', <span>{`${detail['blockname']}(${detail['blk']})`}</span>])
   values.push(['General Category', <span>{`${GeneralCategories[detail['gc']]}(${detail['gc']})`}</span>])
