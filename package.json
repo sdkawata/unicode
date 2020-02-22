@@ -4,12 +4,14 @@
   "description": "",
   "main": "webpack.config.js",
   "scripts": {
-    "watch": "webpack --watch"
+    "watch": "webpack --watch",
+    "getucd": "cd dist && curl http://www.unicode.org/Public/5.2.0/ucdxml/ucd.all.grouped.zip > ucd.all.grouped.zip && unzip ucd.all.grouped.zip && rm ucd.all.grouped.zip"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@material-ui/core": "^4.9.3",
+    "axios": "^0.19.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "ts-loader": "^6.2.1",

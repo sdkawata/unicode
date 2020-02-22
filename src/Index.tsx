@@ -1,6 +1,7 @@
-import React, {useRef, useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import ReactDOM from 'react-dom'
 import {TextField, Grid, Paper, List, ListItem, ListItemText} from '@material-ui/core'
+import {getInfo} from './ucdparser'
 
 const toHex = (i: number) => (
   ('0000' + i.toString(16)).slice(-4)
@@ -9,10 +10,21 @@ const toHex = (i: number) => (
 const Index: React.FC = () => {
   const [text, setText] = useState("")
   const [codePoint, setCodePoint] = useState(null)
-  const textInput = useRef()
+  const [detailedCodePoint, setDetailedCodePoint] = useState(null)
+  const [detail, setDetail] = useState({})
   const textChanged = (e) => {
     setText(e.target.value)
   }
+  useEffect(() => {
+    let askCodePoint = codePoint
+    getInfo(askCodePoint).then((r) => {
+      if (askCodePoint !== codePoint) {
+        return;
+      }
+      setDetailedCodePoint(codePoint)
+      setDetail(r)
+    })
+  }, [codePoint])
   const codePoints = [...text]
   return (
     <div>
@@ -34,7 +46,20 @@ const Index: React.FC = () => {
         </Grid>
         <Grid item xs={6}>
           <Paper>
-            {codePoint}
+            {
+              codePoint === null ?
+              <div/>:
+              (
+                <div>
+                  <div>U+{toHex(codePoint)} {String.fromCodePoint(codePoint)}</div>
+                  {
+                    (detailedCodePoint !== codePoint)?
+                    <div>loading...</div>:
+                    (<div>{detail['na']}</div>)
+                  }
+                </div>
+              )
+            }
           </Paper>
         </Grid>
       </Grid>
