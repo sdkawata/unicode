@@ -25,6 +25,7 @@ export const getInfo = async (codepoint: number) => {
     return cp === codepoint
   })
   if (!char) {
+    console.log('NOT FOUND')
     return {}
   }
   const obj = {}

@@ -1,12 +1,8 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
 import ReactDOM from 'react-dom'
 import {TextField, Grid, Paper, List, ListItem, ListItemText} from '@material-ui/core'
 import {codepointStr} from './util'
 import {UnicodeView} from './UnicodeView'
-
-const toHex = (i: number) => (
-  ('0000' + i.toString(16)).slice(-4)
-)
 
 const Index: React.FC = () => {
   const [text, setText] = useState("")

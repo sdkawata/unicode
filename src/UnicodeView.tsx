@@ -1,6 +1,9 @@
 import React, {useState, useEffect} from 'react'
 import {getInfo} from './ucdparser'
 import {codepointStr} from './util'
+import {ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails} from '@material-ui/core'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import './main.css'
 
 type props = {codePoint: number | null}
 
@@ -23,7 +26,7 @@ function useLoading<T,V>(current: T, loadFunc: (t:T) => Promise<V>, initialValue
 }
 
 export const UnicodeView: React.FC<props> = ({codePoint}) => {
-  const [isLoading, detail] = useLoading(codePoint, getInfo, {})
+  const [isLoading, detail] = useLoading(codePoint, (cp) => (cp === null ? Promise.resolve({}) : getInfo(cp)), {})
   
   return (
     <div>
@@ -32,11 +35,34 @@ export const UnicodeView: React.FC<props> = ({codePoint}) => {
         <div/>:
         (
           <div>
-            <div>{codepointStr(codePoint)} {String.fromCodePoint(codePoint)}</div>
+            <div className="heading">{codepointStr(codePoint)} {String.fromCodePoint(codePoint)}</div>
             {
               (isLoading)?
               <div>loading...</div>:
-              (<div>{detail['na']}</div>)
+              (
+                <div>
+                  <div className="description_area">
+                    <div className="title">NAME</div>
+                    <div className="body">{detail['na']}</div>
+                  </div>
+                  <ExpansionPanel>
+                    <ExpansionPanelSummary
+                      expandIcon={<ExpandMoreIcon/>}
+                    >
+                      raw data
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails>
+                      <div>
+                        {
+                          Object.keys(detail).map((key) => (
+                            <div key={key}>{key}:{detail[key]}</div>
+                          ))
+                        }
+                      </div>
+                    </ExpansionPanelDetails>
+                  </ExpansionPanel>
+                </div>
+              )
             }
           </div>
         )
