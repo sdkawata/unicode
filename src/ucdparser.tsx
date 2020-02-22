@@ -6,8 +6,12 @@ async function getDict() {
   if (dictPromise === null) {
     dictPromise = (async () => {
       const data = (await axios.get('/ucd.all.grouped.xml')).data
+      console.log('parse start')
+      const start = performance.now()
       const domparser = new DOMParser();
       const parsed = domparser.parseFromString(data, 'text/xml')
+      const end = performance.now()
+      console.log(`parse end ${end-start} ms`)
       return parsed
     })()
   }
