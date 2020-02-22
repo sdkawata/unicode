@@ -69,3 +69,4 @@ const Index: React.FC = () => {
 } 
 
 ReactDOM.render(<Index/>, document.getElementById('app'))
+navigator.serviceWorker.register('/sw.js')
