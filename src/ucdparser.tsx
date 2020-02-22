@@ -14,7 +14,7 @@ async function getDict() {
   return await dictPromise;
 }
 
-export const getInfo = async (codepoint) => {
+export const getInfo = async (codepoint: number) => {
   let dict = await getDict()
   const char = Array.from(dict.getElementsByTagName('char')).find((node) => {
     let cp = parseInt(node.getAttribute('cp'), 16);
