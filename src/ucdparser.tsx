@@ -33,7 +33,7 @@ export function initWorker() {
   if (worker) {
     return
   }
-  worker = new Worker('/worker.js')
+  worker = new Worker('./worker.js')
   console.log('will start worker')
   worker.addEventListener('message', (e) => {
     if (e.data.codepoint !== undefined) {

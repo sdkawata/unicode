@@ -1,0 +1,36 @@
+version: 2
+jobs:
+    release:
+        docker:
+            - image: circleci/node:10
+        steps:
+            - add_ssh_keys:
+                fingerprints:
+                    - "bf:c3:ab:b1:23:43:c6:9b:d0:c4:03:28:97:a9:2f:9c"
+            - checkout
+            - run:
+                name: create ucd.json
+                command: python3 prepare/to_json.py
+            - run:
+                name: npm install
+                command: npm install
+            - run:
+                name: build
+                command: npm run build:prod
+            - run:
+                name: release to gh-pages
+                command: |
+                    git config --global user.name "Circle CI"
+                    git config --global user.email "<>"
+                    git --work-tree dist/ checkout --orphan gh-pages
+                    git --work-tree dist/ add --all
+                    git commit -m "[ci skip] release $(date)"
+                    git push --force --set-upstream origin gh-pages
+workflows:
+    version: 2
+    release:
+        jobs:
+            - release:
+                filters:
+                    branches:
+                        only: master
