@@ -1,21 +1,43 @@
 import React, {useRef, useState} from 'react'
 import ReactDOM from 'react-dom'
+import {TextField, Grid, Paper, List, ListItem, ListItemText} from '@material-ui/core'
+
+const toHex = (i: number) => (
+  ('0000' + i.toString(16)).slice(-4)
+)
 
 const Index: React.FC = () => {
   const [text, setText] = useState("")
+  const [codePoint, setCodePoint] = useState(null)
   const textInput = useRef()
-  const textChanged = () => {
-    setText(textInput.current.value)
+  const textChanged = (e) => {
+    setText(e.target.value)
   }
   const codePoints = [...text]
   return (
     <div>
-      <input ref={textInput} onInput={textChanged}/>
-      {
-        codePoints.map((s, i) => {
-          return <div key={i}>{s} U+{s.codePointAt(0).toString(16)}</div>
-        })
-      }
+      <TextField onChange={textChanged}/>
+      <Grid container spacing={3}>
+        <Grid item xs={6}>
+          <Paper>
+            <List>
+              {
+                codePoints.map((s, i) => {
+                  const text = `U+${toHex(s.codePointAt(0))} ${s}`
+                  return (<ListItem key={i} onClick={() => setCodePoint(s.codePointAt(0))}>
+                    <ListItemText primary={text}/>
+                  </ListItem>)
+                })
+              }
+            </List>
+          </Paper>
+        </Grid>
+        <Grid item xs={6}>
+          <Paper>
+            {codePoint}
+          </Paper>
+        </Grid>
+      </Grid>
     </div>
   )
 } 
