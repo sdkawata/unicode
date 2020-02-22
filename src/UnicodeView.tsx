@@ -98,6 +98,11 @@ export const UnicodeView: React.FC<props> = ({codePoint, move}) => {
       ])
     }
   }
+  const qcmap = {'Y': 'Yes', 'M': 'Maybe', 'N': 'No'}
+  values.push([
+    'Normalization Quick Check',
+    <span>{`NFD:${qcmap[detail['NFD_QC']]} NFKD:${qcmap[detail['NFKD_QC']]} NFC:${qcmap[detail['NFC_QC']]} NFKC:${qcmap[detail['NFKC_QC']]}`}</span>
+  ])
   return (
     <div>
       {
