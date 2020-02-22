@@ -1,17 +1,3 @@
-import axios from 'axios'
-
-let dictPromise: Promise<any> | null = null
-
-async function getDict() {
-  if (dictPromise === null) {
-    dictPromise = (async () => {
-      const data = (await axios.get('/ucd.json')).data
-      return data
-    })()
-  }
-  return await dictPromise;
-}
-
 function findChar(dict: any, codepoint:number) {
   for (const group of dict['groups']) {
     for (const char of group['chars']) {
@@ -23,8 +9,7 @@ function findChar(dict: any, codepoint:number) {
   return null;
 }
 
-export const getInfo = async (codepoint: number) => {
-  let dict = await getDict()
+export function parseInfo(dict:any, codepoint:number) {
   const char = findChar(dict, codepoint);
   if (!char) {
     console.log('NOT FOUND')
@@ -40,4 +25,30 @@ export const getInfo = async (codepoint: number) => {
     obj['blockname'] = block['name']
   }
   return obj;
+}
+
+let worker: Worker
+let waiting = {}
+export function initWorker() {
+  if (worker) {
+    return
+  }
+  worker = new Worker('/worker.js')
+  console.log('will start worker')
+  worker.addEventListener('message', (e) => {
+    if (e.data.codepoint) {
+      const waitingR = waiting[e.data.codepoint] || [];
+      waiting[e.data.codepoint] = [];
+      for (const r of waitingR) {
+        r(e.data.result)
+      }
+    }
+  })
+}
+export const getInfo = (codepoint: number) => {
+  let resolve
+  let promise = new Promise((r) => {resolve = r})
+  waiting[codepoint] = (waiting[codepoint] || []).concat([resolve])
+  worker.postMessage({codepoint})
+  return promise
 }

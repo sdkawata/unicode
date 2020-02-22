@@ -72,6 +72,7 @@ const Glyph: React.FC<glyphProps> = ({codePoint, move}) => {
 
 export const UnicodeView: React.FC<props> = ({codePoint, move}) => {
   const [isLoading, detail] = useLoading(codePoint, (cp) => (cp === null ? Promise.resolve({}) : getInfo(cp)), {})
+  console.log(detail)
   const values: [string, JSX.Element][] = []
   values.push(['AGE', <span>{detail['age']}</span>])
   if (detail['na']) {

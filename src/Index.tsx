@@ -4,6 +4,7 @@ import {TextField, Grid, Paper, List, ListItem, ListItemText} from '@material-ui
 import {codepointStr} from './util'
 import {UnicodeView} from './UnicodeView'
 import { makeStyles } from "@material-ui/core/styles";
+import {initWorker} from './ucdparser'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -69,4 +70,5 @@ const Index: React.FC = () => {
 } 
 
 ReactDOM.render(<Index/>, document.getElementById('app'))
+initWorker()
 navigator.serviceWorker.register('/sw.js')

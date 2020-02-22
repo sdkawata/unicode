@@ -2,10 +2,13 @@ const path = require('path')
 
 module.exports = {
   mode: 'development',
-  entry: './src/Index.tsx',
+  entry: {
+    main: './src/Index.tsx',
+    worker: './src/worker.ts',
+  },
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: 'main.js'
+    filename: '[name].js'
   },
 
   resolve: {
@@ -15,22 +18,10 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        use: [
-          {
-            loader: 'ts-loader',
-          }
-        ]
+        use: ['ts-loader']
       },
       {
-        test: /\.ts?$/,
-        use: [
-          {
-            loader: 'ts-loader',
-          }
-        ]
-      },
-      {
-        test: /\.css?$/,
+        test: /\.css$/,
         use: [
           { loader: "style-loader" },
           { loader: "css-loader"},
