@@ -72,7 +72,6 @@ const Glyph: React.FC<glyphProps> = ({codePoint, move}) => {
 
 export const UnicodeView: React.FC<props> = ({codePoint, move}) => {
   const [isLoading, detail] = useLoading(codePoint, (cp) => (cp === null ? Promise.resolve({}) : getInfo(cp)), {})
-  console.log(detail)
   const values: [string, JSX.Element][] = []
   values.push(['AGE', <span>{detail['age']}</span>])
   if (detail['na']) {
@@ -82,7 +81,7 @@ export const UnicodeView: React.FC<props> = ({codePoint, move}) => {
     values.push(['Name(version1)', <span>{detail['na1']}</span>])
   }
   if (detail['aliases']) {
-    values.push(['Alias', <span>{detail['aliases'].map((alias)=> `${alias['alias']}(${alias['type']})`)}</span>])
+    values.push(['Alias', <span>{detail['aliases'].map((alias)=> `${alias['alias']}(${alias['type']})`).join(' ')}</span>])
   }
   values.push(['Block', <span>{`${detail['blockname']}(${detail['blk']})`}</span>])
   values.push(['General Category', <span>{`${GeneralCategories[detail['gc']]}(${detail['gc']})`}</span>])
@@ -95,7 +94,7 @@ export const UnicodeView: React.FC<props> = ({codePoint, move}) => {
     if (detail['dm'] !== '#') {
       values.push([
         'Decomposition Mapping',
-        <span>{detail['dm'].split(' ').map((cp) => <Glyph codePoint={parseInt(cp, 16)} move={move}/>)}</span>
+        <span>{detail['dm'].split(' ').map((cp) => <Glyph codePoint={parseInt(cp, 16)} move={move} key={cp}/>)}</span>
       ])
     }
   }
@@ -132,7 +131,7 @@ export const UnicodeView: React.FC<props> = ({codePoint, move}) => {
                     <ExpansionPanelDetails>
                       <div>
                         {
-                          Object.keys(detail).map((key) => (
+                          Object.keys(detail).filter((key) => typeof detail[key] === "string").map((key) => (
                             <div key={key}>{key}:{detail[key]}</div>
                           ))
                         }

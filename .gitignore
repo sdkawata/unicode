@@ -3,3 +3,4 @@ ucd/ucd.all.grouped.xml
 dist/main.js
 dist/ucd.all.grouped.xml
 dist/ucd.json
+dist/worker.js

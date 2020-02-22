@@ -36,7 +36,7 @@ export function initWorker() {
   worker = new Worker('/worker.js')
   console.log('will start worker')
   worker.addEventListener('message', (e) => {
-    if (e.data.codepoint) {
+    if (e.data.codepoint !== undefined) {
       const waitingR = waiting[e.data.codepoint] || [];
       waiting[e.data.codepoint] = [];
       for (const r of waitingR) {

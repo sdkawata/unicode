@@ -7,7 +7,7 @@ console.log('worker started');
   const data = (await axios.get('/ucd.json')).data
   console.log('dict fetched')
   self.addEventListener('message', function(e) {
-    if (e.data.codepoint) {
+    if (e.data.codepoint !== undefined) {
       const parsed = parseInfo(data, e.data.codepoint);
       (self as any).postMessage({
         codepoint: e.data.codepoint,
