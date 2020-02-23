@@ -4,7 +4,7 @@ import {TextField, Grid, Paper, List, ListItem, ListItemText} from '@material-ui
 import {codepointStr} from './util'
 import {UnicodeView} from './UnicodeView'
 import { makeStyles } from "@material-ui/core/styles";
-import {initWorker} from './ucdparser'
+import {initWorker, getNames} from './ucdparser'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -23,6 +23,7 @@ const Index: React.FC = () => {
   const move = useCallback((cp)=> {
     setCodePoint(cp)
   },[])
+  const names = getNames()
   const textChanged = (e) => {
     const newText = e.target.value
     setText(newText)
@@ -50,7 +51,7 @@ const Index: React.FC = () => {
             <List>
               {
                 codePoints.map((s, i) => {
-                  const text = `${codepointStr(s.codePointAt(0))} ${s}`
+                  const text = (<span><span className="additional">{codepointStr(s.codePointAt(0))}</span> {s} <span className="additional">{names[s.codePointAt(0)] || ''}</span></span>)
                   return (<ListItem key={i} onClick={() => setCodePoint(s.codePointAt(0))}>
                     <ListItemText primary={text}/>
                   </ListItem>)
