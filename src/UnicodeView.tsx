@@ -83,7 +83,7 @@ export const UnicodeView: React.FC<props> = ({codePoint, move}) => {
   if (detail['aliases']) {
     values.push(['Alias', <span>{detail['aliases'].map((alias)=> `${alias['alias']}(${alias['type']})`).join(' ')}</span>])
   }
-  values.push(['Block', <span>{`${detail['blockname']}(${detail['blk']})`}</span>])
+  values.push(['Block', <span>{`${detail['_blockname']}(${detail['blk']})`}</span>])
   values.push(['General Category', <span>{`${GeneralCategories[detail['gc']]}(${detail['gc']})`}</span>])
   values.push(['Combining class', <span>{detail['ccc']}</span>])
   values.push(['Bidrectionality Property', <span>{detail['bc']}</span>])
@@ -131,7 +131,9 @@ export const UnicodeView: React.FC<props> = ({codePoint, move}) => {
                     <ExpansionPanelDetails>
                       <div>
                         {
-                          Object.keys(detail).filter((key) => typeof detail[key] === "string").map((key) => (
+                          Object.keys(detail).filter((key) => 
+                            typeof detail[key] === "string" && key[0] !== '_'
+                          ).map((key) => (
                             <div key={key}>{key}:{detail[key]}</div>
                           ))
                         }
