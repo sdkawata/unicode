@@ -36,7 +36,7 @@ const GeneralCategories = {
   'Sk': 'Symbol, modifier',
   'So': 'Symbol, other',
 
-  'Zc': 'Separator, space',
+  'Zs': 'Separator, space',
   'Zl': 'Separator, line',
   'Zp': 'Separator, paragraph',
 
