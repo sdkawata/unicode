@@ -12,10 +12,10 @@ console.log('worker started');
 
 function nextcp(dict: Dict, gidx: number, cidx: number) {
   cidx++
-  if (cidx < dict['groups'][gidx]['chars'].length ) {
+  if (cidx < (dict['groups'][gidx]['chars'] || []).length ) {
     return parseInt(dict['groups'][gidx]['chars'][cidx].cp, 16)
   }
-  for (gidx++; gidx < dict['groups']['chars'].length; gidx++) {
+  for (gidx++; gidx < dict['groups'].length; gidx++) {
     if (dict['groups'][gidx]['chars'].length > 0) {
       return parseInt(dict['groups'][gidx]['chars'][0].cp, 16)
     }
@@ -28,9 +28,9 @@ function prevcp(dict: Dict, gidx: number, cidx: number) {
     return parseInt(dict['groups'][gidx]['chars'][cidx].cp, 16)
   }
   for (gidx--; gidx >=0; gidx--) {
-    const group = gidx['groups'][gidx]
-    if (group['chars'].length > 0) {
-      return parseInt(group['char'])
+    const group = dict['groups'][gidx]
+    if ((group['chars'] || []).length > 0) {
+      return parseInt(group['chars'][group['chars'].length - 1].cp, 16)
     }
   }
   return undefined
