@@ -122,6 +122,14 @@ export const UnicodeView: React.FC<props> = ({codePoint, move}) => {
                       <div className="body">{elem}</div>
                     </div>))}
                   </div>
+                  <div className="prev_and_next">
+                    <div className="prev">
+                      &lt;&lt; {detail['_prevcp'] !== undefined ? (<Glyph codePoint={detail['_prevcp']} move={move}/>) : null}
+                    </div>
+                    <div className="next">
+                      {detail['_nextcp'] !== undefined ? (<Glyph codePoint={detail['_nextcp']} move={move}/>) : null} &gt;&gt;
+                    </div>
+                  </div>
                   <ExpansionPanel>
                     <ExpansionPanelSummary
                       expandIcon={<ExpandMoreIcon/>}

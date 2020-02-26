@@ -22,3 +22,15 @@
     font-size: 0.8rem;
     color: #999;
 }
+.prev_and_next {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.prev {
+
+}
+.next {
+
+}

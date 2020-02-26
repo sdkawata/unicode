@@ -20,7 +20,7 @@ function nextcp(dict: Dict, gidx: number, cidx: number) {
       return parseInt(dict['groups'][gidx]['chars'][0].cp, 16)
     }
   }
-  return null;
+  return undefined
 }
 function prevcp(dict: Dict, gidx: number, cidx: number) {
   cidx--;
@@ -33,7 +33,7 @@ function prevcp(dict: Dict, gidx: number, cidx: number) {
       return parseInt(group['char'])
     }
   }
-  return null;
+  return undefined
 }
 
 function findChar(dict: Dict, codepoint:number) {
@@ -48,7 +48,7 @@ function findChar(dict: Dict, codepoint:number) {
       } 
     }
   }
-  return null;
+  return undefined
 }
 
 function parseInfo(dict: Dict, codepoint:number) {
