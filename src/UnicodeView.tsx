@@ -3,6 +3,7 @@ import {getInfo} from './ucdparser'
 import {codepointStr} from './util'
 import {ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails} from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import {Link} from 'react-router-dom'
 import './main.css'
 
 type props = {codePoint: number | null, move: (cp:number) => void}
@@ -110,7 +111,13 @@ export const UnicodeView: React.FC<props> = ({codePoint, move}) => {
         <div/>:
         (
           <div>
-            <div className="heading">{codepointStr(codePoint)} {String.fromCodePoint(codePoint)}</div>
+            <div className="heading">
+              {codepointStr(codePoint)}&nbsp;
+              {String.fromCodePoint(codePoint)}
+              <Link className="around_link" to={`/search?offset=${detail['_index']}`}>
+                show codes around this
+              </Link>
+            </div>
             {
               (isLoading)?
               <div>loading...</div>:

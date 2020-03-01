@@ -11,6 +11,10 @@
     margin: 10px;
     font-size: 1.5rem;
 }
+.heading .around_link {
+    font-size: 0.8rem;
+    margin-left: 10px;
+}
 .glyph {
     border: solid #777 1px;
     margin-left: 5px;

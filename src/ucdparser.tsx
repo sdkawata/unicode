@@ -1,6 +1,10 @@
 import {useState, useEffect} from 'react'
 import {v4 as uuidv4} from 'uuid'
 
+export type SearchParam = {
+  offset?: number,
+}
+
 let worker: Worker
 let waiting = {}
 let names = {}
@@ -29,6 +33,7 @@ export function initWorker() {
     }
   })
 }
+
 export function useNames() {
   const [incr, setIncr] = useState(0)
   useEffect(() => {
@@ -44,10 +49,17 @@ function rpc(param) {
   const key = uuidv4()
   waiting[key] = resolve
   param['key'] = key
-  worker.postMessage(param)
+  namesPromise.then(() => {
+    worker.postMessage(param)
+  })
   return promise
 }
-
+export async function getSearch(param: SearchParam): Promise<number[]> {
+  return (await rpc({
+    type: 'search',
+    ...param
+  })) as number[]
+}
 export async function getInfo (codepoint: number){
   return await rpc(
     {

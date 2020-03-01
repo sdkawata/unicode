@@ -1,4 +1,7 @@
 import axios from 'axios'
+import {SearchParam} from './ucdparser'
+
+const MAX_SERACH_RESULTS = 30
 
 type Dict = {
   groups: {
@@ -9,6 +12,17 @@ type Dict = {
 }
 
 console.log('worker started');
+
+function calcIndex(dict: Dict) {
+  let idx = 0;
+  for (let gidx = 0; gidx < dict['groups'].length; gidx++) {
+    const group = dict['groups'][gidx];
+    for (let cidx = 0; cidx < group['chars'].length; cidx++) {
+      const char = group['chars'][cidx]._index = idx;
+      idx++;
+    }
+  }
+}
 
 function nextcp(dict: Dict, gidx: number, cidx: number) {
   cidx++
@@ -80,8 +94,31 @@ function extractNames(dict:Dict) {
   return names
 }
 
+function search(dict:Dict, searchParam: SearchParam): number[] {
+  console.log('search')
+  const offset = searchParam.offset || 0;
+  let result = []
+  let ptr = -1;
+  for (let gidx = 0; gidx < dict['groups'].length; gidx++) {
+    const group = dict['groups'][gidx];
+    for (let cidx = 0; cidx < group['chars'].length; cidx++) {
+      const char = group['chars'][cidx]
+      ptr++;
+      if (ptr < offset) {
+        continue;
+      }
+      result.push(parseInt(char.cp, 16))
+      if (result.length >= MAX_SERACH_RESULTS) {
+        return result
+      }
+    }
+  }
+  return result
+}
+
 (async () => {
   const data = (await axios.get('./ucd.json')).data as Dict
+  calcIndex(data)
   console.log('dict fetched')
   const names = extractNames(data);
   (self as any).postMessage({
@@ -96,6 +133,14 @@ function extractNames(dict:Dict) {
           key: e.data.key,
           result: parsed,
         });
+      } else if (e.data.type === 'search') {
+        const searched = search(data, e.data);
+        (self as any).postMessage({
+          key: e.data.key,
+          result: searched,
+        });
+      } else {
+        console.log('unprocessable message', e.data)
       }
     }
   })
