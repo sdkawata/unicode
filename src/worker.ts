@@ -89,12 +89,14 @@ function extractNames(dict:Dict) {
     result: names
   })
   self.addEventListener('message', function(e) {
-    if (e.data.codepoint !== undefined) {
-      const parsed = parseInfo(data, e.data.codepoint);
-      (self as any).postMessage({
-        codepoint: e.data.codepoint,
-        result: parsed,
-      });
+    if (e.data.key !== undefined) {
+      if (e.data.codepoint !== undefined) {
+        const parsed = parseInfo(data, e.data.codepoint);
+        (self as any).postMessage({
+          key: e.data.key,
+          result: parsed,
+        });
+      }
     }
   })
 })();

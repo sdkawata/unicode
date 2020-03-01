@@ -1,4 +1,5 @@
 import {useState, useEffect} from 'react'
+import {v4 as uuidv4} from 'uuid'
 
 let worker: Worker
 let waiting = {}
@@ -16,10 +17,10 @@ export function initWorker() {
   worker = new Worker('./worker.js')
   console.log('will start worker')
   worker.addEventListener('message', (e) => {
-    if (e.data.codepoint !== undefined) {
-      const waitingR = waiting[e.data.codepoint] || [];
-      waiting[e.data.codepoint] = [];
-      for (const r of waitingR) {
+    if (e.data.key !== undefined) {
+      if (waiting[e.data.key]) {
+        let r = waiting[e.data.key]
+        delete waiting[e.data.key]
         r(e.data.result)
       }
     } else if (e.data.type === 'names') {
@@ -37,10 +38,20 @@ export function useNames() {
   }, [])
   return names;
 }
-export const getInfo = (codepoint: number) => {
+function rpc(param) {
   let resolve
-  let promise = new Promise((r) => {resolve = r})
-  waiting[codepoint] = (waiting[codepoint] || []).concat([resolve])
-  worker.postMessage({codepoint})
+  const promise = new Promise((r) => {resolve = r})
+  const key = uuidv4()
+  waiting[key] = resolve
+  param['key'] = key
+  worker.postMessage(param)
   return promise
+}
+
+export async function getInfo (codepoint: number){
+  return await rpc(
+    {
+      codepoint
+    }
+  )
 }
