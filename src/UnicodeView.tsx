@@ -94,7 +94,7 @@ export const UnicodeView: React.FC<props> = ({codePoint, move}) => {
     if (detail['dm'] !== '#') {
       values.push([
         'Decomposition Mapping',
-        <span>{detail['dm'].split(' ').map((cp) => <Glyph codePoint={parseInt(cp, 16)} move={move} key={cp}/>)}</span>
+        <span>{detail['dm'].split(' ').map((cp, idx) => <Glyph codePoint={parseInt(cp, 16)} move={move} key={`${cp}-${idx}`}/>)}</span>
       ])
     }
   }
