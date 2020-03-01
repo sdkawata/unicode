@@ -1,6 +1,13 @@
+import {useState, useEffect} from 'react'
+
 let worker: Worker
 let waiting = {}
 let names = {}
+let [namesPromise, namesResolve] = (() => {
+  let resolve
+  let p = new Promise((r) => {resolve = r})
+  return [p, resolve]
+})()
 
 export function initWorker() {
   if (worker) {
@@ -17,11 +24,18 @@ export function initWorker() {
       }
     } else if (e.data.type === 'names') {
       names = e.data.result
+      namesResolve(names)
     }
   })
 }
-export function getNames() {
-  return names
+export function useNames() {
+  const [incr, setIncr] = useState(0)
+  useEffect(() => {
+    namesPromise.then(() => {
+      setIncr(i => i+1)
+    })
+  }, [])
+  return names;
 }
 export const getInfo = (codepoint: number) => {
   let resolve

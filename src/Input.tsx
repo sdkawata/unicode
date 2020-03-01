@@ -2,8 +2,8 @@ import React, {useState, useCallback} from 'react'
 import {TextField, Grid, Paper, List, ListItem, ListItemText} from '@material-ui/core'
 import {codepointStr} from './util'
 import {UnicodeView} from './UnicodeView'
+import {UnicodeList} from './UnicodeList'
 import { makeStyles } from "@material-ui/core/styles";
-import {getNames} from './ucdparser'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -22,7 +22,6 @@ export const Input: React.FC = () => {
   const move = useCallback((cp)=> {
     setCodePoint(cp)
   },[])
-  const names = getNames()
   const textChanged = (e) => {
     const newText = e.target.value
     setText(newText)
@@ -37,7 +36,6 @@ export const Input: React.FC = () => {
     }).join('')
     setText(newText)
   }
-  const codePoints = [...text]
   return (
     <div className={classes.root}>
       <div>
@@ -47,16 +45,7 @@ export const Input: React.FC = () => {
       <Grid container spacing={3}>
         <Grid item xs={6}>
           <Paper>
-            <List>
-              {
-                codePoints.map((s, i) => {
-                  const text = (<span><span className="additional">{codepointStr(s.codePointAt(0))}</span> {s} <span className="additional">{names[s.codePointAt(0)] || ''}</span></span>)
-                  return (<ListItem key={i} onClick={() => setCodePoint(s.codePointAt(0))}>
-                    <ListItemText primary={text}/>
-                  </ListItem>)
-                })
-              }
-            </List>
+            <UnicodeList move={move} codePoints={[...text].map((s) => s.codePointAt(0))}/>
           </Paper>
         </Grid>
         <Grid item xs={6}>
