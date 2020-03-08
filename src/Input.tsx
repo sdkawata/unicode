@@ -3,6 +3,7 @@ import {TextField, Grid, Paper} from '@material-ui/core'
 import {UnicodeView} from './UnicodeView'
 import {UnicodeList} from './UnicodeList'
 import { makeStyles } from "@material-ui/core/styles";
+import {Header} from './Header'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -37,6 +38,7 @@ export const Input: React.FC = () => {
   }
   return (
     <div className={classes.root}>
+      <Header/>
       <div>
         <TextField label="Text" onChange={textChanged} value={text} id="text_input" size="medium"/>
         <TextField label="CodePoints" onChange={codePointsTextChanged} value={codePointsText} id="code_point_input" size="medium"/>
