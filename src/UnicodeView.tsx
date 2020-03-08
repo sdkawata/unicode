@@ -48,6 +48,15 @@ const GeneralCategories = {
   'Cn': 'Other, assigned',
 }
 
+const EastAsianWidths = {
+  'F': 'Fullwidth',
+  'H': 'HalfWidth',
+  'W': 'Wide',
+  'Na': 'Narrow',
+  'A': 'Ambiguous',
+  'N': 'Neutral',
+}
+
 function useLoading<T,V>(current: T, loadFunc: (t:T) => Promise<V>, initialValue:V): [boolean, V] {
   const [loaded, setLoaded] = useState<T>(current)
   const [value, setValue] = useState<V>(initialValue)
@@ -86,9 +95,10 @@ export const UnicodeView: React.FC<props> = ({codePoint, move}) => {
       values.push(['Alias', <span>{detail['aliases'].map((alias)=> `${alias['alias']}(${alias['type']})`).join(' ')}</span>])
     }
     values.push(['Block', <span>{`${detail['_blockname']} (${detail['blk']}) ${codepointStr(detail['_block_first_cp'])}-${codepointStr(detail['_block_last_cp'])}`}</span>])
-    values.push(['General Category', <span>{`${GeneralCategories[detail['gc']]}(${detail['gc']})`}</span>])
+    values.push(['General Category', <span>{`${GeneralCategories[detail['gc']]} (${detail['gc']})`}</span>])
     values.push(['Combining class', <span>{detail['ccc']}</span>])
     values.push(['Bidrectionality Property', <span>{detail['bc']}</span>])
+    values.push(['East Asian Width', <span>{EastAsianWidths[detail['ea']]} ({detail['ea']})</span>])
     if (detail['bmg']) {
       values.push(['Mirrored Glyph', <span><Glyph codePoint={parseInt(detail['bmg'], 16)} move={move}/></span>])
     }
