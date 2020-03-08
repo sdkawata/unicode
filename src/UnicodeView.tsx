@@ -74,36 +74,38 @@ const Glyph: React.FC<glyphProps> = ({codePoint, move}) => {
 export const UnicodeView: React.FC<props> = ({codePoint, move}) => {
   const [isLoading, detail] = useLoading(codePoint, (cp) => (cp === null ? Promise.resolve({}) : getInfo(cp)), {})
   const values: [string, JSX.Element][] = []
-  values.push(['AGE', <span>{detail['age']}</span>])
-  if (detail['na']) {
-    values.push(['Name', <span>{detail['na']}</span>])
-  }
-  if (detail['na1']) {
-    values.push(['Name(version1)', <span>{detail['na1']}</span>])
-  }
-  if (detail['aliases']) {
-    values.push(['Alias', <span>{detail['aliases'].map((alias)=> `${alias['alias']}(${alias['type']})`).join(' ')}</span>])
-  }
-  values.push(['Block', <span>{`${detail['_blockname']}(${detail['blk']})`}</span>])
-  values.push(['General Category', <span>{`${GeneralCategories[detail['gc']]}(${detail['gc']})`}</span>])
-  values.push(['Combining class', <span>{detail['ccc']}</span>])
-  values.push(['Bidrectionality Property', <span>{detail['bc']}</span>])
-  if (detail['bmg']) {
-    values.push(['Mirrored Glyph', <span><Glyph codePoint={parseInt(detail['bmg'], 16)} move={move}/></span>])
-  }
-  if (detail['dm']) {
-    if (detail['dm'] !== '#') {
-      values.push([
-        'Decomposition Mapping',
-        <span>{detail['dm'].split(' ').map((cp, idx) => <Glyph codePoint={parseInt(cp, 16)} move={move} key={`${cp}-${idx}`}/>)}</span>
-      ])
+  if (detail && detail['cp']) {
+    values.push(['AGE', <span>{detail['age']}</span>])
+    if (detail['na']) {
+      values.push(['Name', <span>{detail['na']}</span>])
     }
+    if (detail['na1']) {
+      values.push(['Name(version1)', <span>{detail['na1']}</span>])
+    }
+    if (detail['aliases']) {
+      values.push(['Alias', <span>{detail['aliases'].map((alias)=> `${alias['alias']}(${alias['type']})`).join(' ')}</span>])
+    }
+    values.push(['Block', <span>{`${detail['_blockname']} (${detail['blk']}) ${codepointStr(detail['_block_first_cp'])}-${codepointStr(detail['_block_last_cp'])}`}</span>])
+    values.push(['General Category', <span>{`${GeneralCategories[detail['gc']]}(${detail['gc']})`}</span>])
+    values.push(['Combining class', <span>{detail['ccc']}</span>])
+    values.push(['Bidrectionality Property', <span>{detail['bc']}</span>])
+    if (detail['bmg']) {
+      values.push(['Mirrored Glyph', <span><Glyph codePoint={parseInt(detail['bmg'], 16)} move={move}/></span>])
+    }
+    if (detail['dm']) {
+      if (detail['dm'] !== '#') {
+        values.push([
+          'Decomposition Mapping',
+          <span>{detail['dm'].split(' ').map((cp, idx) => <Glyph codePoint={parseInt(cp, 16)} move={move} key={`${cp}-${idx}`}/>)}</span>
+        ])
+      }
+    }
+    const qcmap = {'Y': 'Yes', 'M': 'Maybe', 'N': 'No'}
+    values.push([
+      'Normalization Quick Check',
+      <span>{`NFD:${qcmap[detail['NFD_QC']]} NFKD:${qcmap[detail['NFKD_QC']]} NFC:${qcmap[detail['NFC_QC']]} NFKC:${qcmap[detail['NFKC_QC']]}`}</span>
+    ])
   }
-  const qcmap = {'Y': 'Yes', 'M': 'Maybe', 'N': 'No'}
-  values.push([
-    'Normalization Quick Check',
-    <span>{`NFD:${qcmap[detail['NFD_QC']]} NFKD:${qcmap[detail['NFKD_QC']]} NFC:${qcmap[detail['NFC_QC']]} NFKC:${qcmap[detail['NFKC_QC']]}`}</span>
-  ])
   return (
     <div>
       {

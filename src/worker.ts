@@ -79,6 +79,8 @@ function parseInfo(dict: Dict, codepoint:number) {
   })
   if (block) {
     obj['_blockname'] = block['name']
+    obj['_block_first_cp'] = parseInt(block['first-cp'], 16)
+    obj['_block_last_cp'] = parseInt(block['last-cp'], 16)
   }
   return obj;
 }
